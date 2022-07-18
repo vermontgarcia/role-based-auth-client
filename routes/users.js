@@ -20,6 +20,24 @@ userRouter.get("/list", (req, res) => {
     });
 });
 
+userRouter.get("/:id", (req, res) => {
+  // Get user by ID
+
+  const id = req?.params?.id;
+
+  User.findById(id)
+    .then((user) => {
+      console.log(user);
+      delete user._doc.password;
+      res.status(200).json({ user, msg: "User retrieved succesfully" });
+    })
+    .catch((err) => {
+      res
+        .status(500)
+        .json({ err, msg: "Something went grong. User not retrieved" });
+    });
+});
+
 userRouter.post("/create", (req, res) => {
   // Password validation, encryption, user creation on data base and token creation
   if (req.body.password !== req.body.confirmPassword)

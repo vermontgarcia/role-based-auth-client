@@ -1,68 +1,41 @@
-import { FormEvent, useContext, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useNavigate } from 'react-router-dom';
-import { signup } from '../services/authService';
-import { AlertType } from '../types/User';
-import Alert from '@mui/material/Alert';
-import Snackbar from '@mui/material/Snackbar';
+import { useParams } from 'react-router-dom';
+import { UserDataType } from '../types/User';
+import { getUserById } from '../services/userService';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 import '../App.css';
-import AuthContext from '../context/AuthProvider';
 
 const theme = createTheme();
 
 const UserDetails = () => {
-  const navigate = useNavigate();
-  const { auth } = useContext(AuthContext);
+  const { id } = useParams();
 
-  const [alert, setAlert] = useState<AlertType>({severity: "success", message: ""});
-  const [open, setOpen] = useState(false);
+  const [user, setUser] = useState<UserDataType>({});
+  const [isLoadin, setIsLoading] = useState(true);
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const firstName = data.get('firstName');
-    const lastName = data.get('lastName');
-    const username = `${firstName?.toString().toLowerCase()}${lastName?.toString().toLowerCase()}`;
-    const user = {
-      firstName,
-      lastName, 
-      username,
-      email: data.get('email'),
-      password: data.get('password'),
-      confirmPassword: data.get('password'),
-    };
-    try {
-      const { data } = await signup(user);
-      console.log(data)
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-      navigate('/');
-    } catch (error){
-      console.log(error)
-      setAlert({
-        severity: 'error',
-        message: `${error.response.data.msg}`
-      });
-      setOpen(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      const { data } = await getUserById(id || '');
+      setUser(data.user);
+      setIsLoading(false);
     }
-  };
-
-  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpen(false);
-  };
+    fetchData();
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main">
+      <Container component="main" maxWidth="md">
         <CssBaseline />
         <Box
           sx={{
@@ -72,56 +45,106 @@ const UserDetails = () => {
             alignItems: 'center',
           }}
         >
-          <Typography component="h1" variant="h5">
-            User details
-          </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                />
-              </Grid>
-            </Grid>
-          </Box>
+          {!isLoadin && (
+            <Fragment>
+              <Typography component="h1" variant="h5" sx={{ mb: 6 }}>
+                User details
+              </Typography>
+              <Box sx={{ mt: 3 }}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={4}>
+                    <TextField
+                      fullWidth
+                      id="firstName"
+                      label="First Name"
+                      value={user?.firstName}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={4}>
+                    <TextField
+                      fullWidth
+                      id="lastName"
+                      label="Last Name"
+                      value={user?.lastName}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={4}>
+                    <TextField
+                      fullWidth
+                      id="username"
+                      label="Username"
+                      value={user?.username}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      id="email"
+                      label="Email Address"
+                      value={user?.email}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      fullWidth
+                      id="firstName"
+                      label="First Name"
+                      value={user?.firstName}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      fullWidth
+                      id="lastName"
+                      label="Last Name"
+                      value={user?.lastName}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <FormControl fullWidth>
+                      <InputLabel id="role-label">Role</InputLabel>
+                        <Select
+                          labelId='role-label'
+                          required
+                          fullWidth
+                          id="role"
+                          label="Role"
+                          name="role"
+                          value={user?.role}
+                          readOnly
+                        >
+                          <MenuItem value={"User"}>User</MenuItem>
+                          <MenuItem value={"Client"}>Client</MenuItem>
+                          <MenuItem value={"Admin"}>Admin</MenuItem>
+                        </Select>
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <FormControl fullWidth>
+                      <InputLabel id="client-id-label">Client</InputLabel>
+                        <Select
+                          labelId='client-id-label'
+                          required
+                          fullWidth
+                          id="clientId"
+                          label="Client"
+                          name="clientId"
+                          value={user?.clientId}
+                          readOnly
+                          sx={{ mb: 2 }}
+                        >
+                          <MenuItem value={100}>My Company</MenuItem>
+                          <MenuItem value={101}>Other Company One</MenuItem>
+                          <MenuItem value={102}>Other Company Two</MenuItem>
+                        </Select>
+                    </FormControl>
+                  </Grid>
+                </Grid>
+              </Box>
+            </Fragment>
+          )}
         </Box>
       </Container>
-      <Snackbar
-        open={open}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical:'bottom', horizontal:'center' }}
-      >
-        <Alert severity={alert.severity} onClose={handleClose}>
-          {alert.message}
-        </Alert>
-      </Snackbar>
     </ThemeProvider>
   );
 }

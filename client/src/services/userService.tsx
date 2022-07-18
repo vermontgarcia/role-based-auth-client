@@ -9,3 +9,7 @@ export const getUsersList = () => {
 export const createUser = (user) => {
   return axios.post(`${base_url}/users/create`, user)
 }
+
+export const getUserById = (id: string) => {
+  return axios.get(`${base_url}/users/${id}`);
+}
