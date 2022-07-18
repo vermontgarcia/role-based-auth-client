@@ -1,6 +1,6 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useContext, useState } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { signup } from '../services/authService';
 import { AlertType } from '../types/User';
 import Alert from '@mui/material/Alert';
@@ -21,11 +21,15 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Copyright from './Copyright';
 import logo from '../logo.svg';
 import '../App.css';
+import AuthContext from '../context/AuthProvider';
 
 const theme = createTheme();
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const { setAuth } = useContext(AuthContext);
+  const location = useLocation();
+  const from = location.state?.from?.pathName || "/users";
 
   const [showPassword, setShowPassword] = useState(false);
   const [alert, setAlert] = useState<AlertType>({severity: "success", message: ""});
@@ -47,12 +51,11 @@ const SignUp = () => {
     };
     try {
       const { data } = await signup(user);
-      console.log(data)
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-      navigate('/');
+      const { token } = data;
+      const role = data?.user?.role;
+      setAuth({ role, user: data.user, token })
+      navigate(from, { replace: true});
     } catch (error){
-      console.log(error)
       setAlert({
         severity: 'error',
         message: `${error.response.data.msg}`

@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useContext, useState } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { signup } from '../services/authService';
@@ -12,11 +12,13 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import '../App.css';
+import AuthContext from '../context/AuthProvider';
 
 const theme = createTheme();
 
 const UserDetails = () => {
   const navigate = useNavigate();
+  const { auth } = useContext(AuthContext);
 
   const [alert, setAlert] = useState<AlertType>({severity: "success", message: ""});
   const [open, setOpen] = useState(false);

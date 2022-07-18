@@ -1,9 +1,5 @@
 import { UserDataType } from "../types/User";
-
-const ADMIN = 'Admin';
-const USER = 'User';
-const CLIENT = 'Client';
-
+import { ADMIN, CLIENT, USER } from "./Consts";
 export default class UserDataGard {
   userAllowedData: UserDataType[]
 

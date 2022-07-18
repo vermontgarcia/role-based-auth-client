@@ -1,10 +1,11 @@
 import { StrictMode } from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { createRoot } from 'react-dom/client';
 
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { AuthProvider } from './context/AuthProvider';
 
 const root = createRoot(
   document.getElementById('root') as HTMLElement
@@ -12,7 +13,11 @@ const root = createRoot(
 root.render(
   <StrictMode>
     <BrowserRouter>
-      <App />
+      <AuthProvider>
+        <Routes>
+          <Route  path="/*" element={<App />} />
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
   </StrictMode>
 );

@@ -1,4 +1,4 @@
-import { ChangeEvent, Fragment, useEffect, useState } from 'react';
+import { ChangeEvent, Fragment, useContext, useEffect, useState } from 'react';
 import { TablePagination } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { getUsersList } from '../services/userService';
@@ -10,8 +10,10 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Title from './Title';
 import UserDataGard from '../lib/UserDataGuard';
+import AuthContext from '../context/AuthProvider';
 
 const UsersList = () => {
+  const { auth } = useContext(AuthContext);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [users, setUsers] = useState<UserDataType[]>([]);
@@ -29,9 +31,7 @@ const UsersList = () => {
   useEffect(() => {
     async function fetchData() {
       const { data } = await getUsersList();
-      console.log(data)
-      const authenticatedUser = JSON.parse(localStorage.getItem('user') || '');
-      const { userAllowedData } = new UserDataGard(authenticatedUser, data?.list);
+      const { userAllowedData } = new UserDataGard(auth.user, data?.list);
       setUsers(userAllowedData)
     }
     fetchData();
