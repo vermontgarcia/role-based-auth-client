@@ -8,6 +8,7 @@ import UserForm from './routes/UserForm';
 import Logout from './routes/Logout';
 import RequireAuth from './components/RequireAuth';
 import { ADMIN, CLIENT, USER } from './lib/Consts';
+import Help from './routes/Help';
 
 const App = () => {
   return (
@@ -22,8 +23,8 @@ const App = () => {
         <Route element={<RequireAuth allowedRoles={[ADMIN, CLIENT]} />}>
           <Route path='users/addnew' element={<UserForm />} />
         </Route>
+        <Route path='help' element={<Help />} />
       </Route>
-      <Route path='help' element={<Users />} />
         </Route>
     </Routes>
   );
