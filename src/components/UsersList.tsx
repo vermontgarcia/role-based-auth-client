@@ -17,66 +17,74 @@ function createData(
   username: string,
   email: string,
   role: string,
+  clientId: number,
 ) {
-  return { id, firstName, lastName, username, email, role };
+  return { id, firstName, lastName, username, email, role, clientId };
 }
 
 const rows = [
   createData(
     0,
-    'Elvis',
-    'Presley',
-    'king',
-    'elvis.presley@mycompany.com',
+    'Drake',
+    'Alston',
+    'drake',
+    'drake.alston@mycompany.com',
     'Admin',
+    101
   ),
   createData(
     1,
-    'Paul',
-    'McCartney',
-    'paul',
-    'paul.mccartney@othercompany.com',
+    'Lester',
+    'Battle',
+    'lester',
+    'lester.battle@othercompany.com',
     'Client',
+    101
   ),
   createData(
     2,
-    'Tom',
-    'Scholz',
-    'tommy',
-    'tom.scholz@othercompany.com',
+    'Camdem',
+    'Baker',
+    'camdem',
+    'camdem.baker@othercompany.com',
     'Client',
+    102
   ),
   createData(
     3,
-    'Michael',
-    'Jackson',
-    'michael',
-    'michael.jackson@mycompany.com',
+    'Yetta',
+    'Mullins',
+    'yetta',
+    'yetta.mullins@mycompany.com',
     'User',
+    103
   ),
   createData(
     4,
-    'Bruce',
-    'Springsteen',
-    'bruce',
-    'bruce.springsteen@mycompany.coms',
+    'Yasir',
+    'Landry',
+    'yasir',
+    'yasir.landry@mycompany.com',
     'User',
+    104
   ),
   createData(
     5,
-    'Bruce',
-    'Springsteen',
-    'bruce',
-    'bruce.springsteen@mycompany.coms',
+    'Alice',
+    'Wrap',
+    'alice',
+    'alice.wrap@mycompany.com',
     'User',
+    105
   ),
   createData(
     6,
-    'Bruce',
-    'Springsteen',
-    'bruce',
-    'bruce.springsteen@mycompany.coms',
+    'Json',
+    'McCoy',
+    'json',
+    'json.mccoy@mycompany.com',
     'User',
+    106
   ),
 ];
 
@@ -108,12 +116,12 @@ const UsersList = () => {
         </TableHead>
         <TableBody>
           {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-            <TableRow component={Link} to={`/users/${row.id}`} key={row.id}>
-                <TableCell>{row.firstName}</TableCell>
-                <TableCell>{row.lastName}</TableCell>
-                <TableCell>{row.username}</TableCell>
-                <TableCell>{row.email}</TableCell>
-                <TableCell>{row.role}</TableCell>
+            <TableRow key={row.id}>
+                <TableCell children={<Link to={`/users/${row.id}`}>{row.firstName}</Link>} />
+                <TableCell children={<Link to={`/users/${row.id}`}>{row.lastName}</Link>} />
+                <TableCell children={<Link to={`/users/${row.id}`}>{row.username}</Link>} />
+                <TableCell children={<Link to={`/users/${row.id}`}>{row.email}</Link>} />
+                <TableCell children={<Link to={`/users/${row.id}`}>{row.role}</Link>} />
             </TableRow>
           ))}
         </TableBody>

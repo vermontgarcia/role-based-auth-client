@@ -1,4 +1,4 @@
-import { mainListItems, secondaryListItems } from '../routes/ListItems';
+import { mainListItems, secondaryListItems } from '../lib/ListItems';
 import { styled } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
@@ -6,6 +6,7 @@ import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ListItem from './ListItem';
 
 const drawerWidth: number = 240;
 
@@ -54,9 +55,9 @@ const AppDrawer = (props: { open: any; toggleDrawer: any; }) => {
       </Toolbar>
       <Divider />
       <List component="nav">
-        {mainListItems}
+        {mainListItems.map(({title, route, Icon, id})=><ListItem key={id} title={title} route={route} Icon={Icon} />)}
         <Divider sx={{ my: 1 }} />
-        {secondaryListItems}
+        {secondaryListItems.map(({title, route, Icon, id})=><ListItem key={id} title={title} route={route} Icon={Icon} />)}
       </List>
     </Drawer>
   )
