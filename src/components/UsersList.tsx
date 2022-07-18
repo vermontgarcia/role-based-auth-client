@@ -1,94 +1,27 @@
 import { ChangeEvent, Fragment, useState } from 'react';
 import { TablePagination } from '@mui/material';
 import { Link } from 'react-router-dom';
-
+import { usersData } from '../lib/UsersData';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Title from './Title';
+import UserDataGard from '../lib/UserDataGuard';
 
-// Generate User Data
-function createData(
-  id: number,
-  firstName: string,
-  lastName: string,
-  username: string,
-  email: string,
-  role: string,
-  clientId: number,
-) {
-  return { id, firstName, lastName, username, email, role, clientId };
+const authenticatedUser = {
+  id: 7,
+  firstName: 'Vermont',
+  lastName: 'Garcia',
+  username: 'vermont',
+  email: 'vermont.garcia@mycompany.com',
+  role: 'Admin',
+  clientId: 102,
 }
 
-const rows = [
-  createData(
-    0,
-    'Drake',
-    'Alston',
-    'drake',
-    'drake.alston@mycompany.com',
-    'Admin',
-    101
-  ),
-  createData(
-    1,
-    'Lester',
-    'Battle',
-    'lester',
-    'lester.battle@othercompany.com',
-    'Client',
-    101
-  ),
-  createData(
-    2,
-    'Camdem',
-    'Baker',
-    'camdem',
-    'camdem.baker@othercompany.com',
-    'Client',
-    102
-  ),
-  createData(
-    3,
-    'Yetta',
-    'Mullins',
-    'yetta',
-    'yetta.mullins@mycompany.com',
-    'User',
-    103
-  ),
-  createData(
-    4,
-    'Yasir',
-    'Landry',
-    'yasir',
-    'yasir.landry@mycompany.com',
-    'User',
-    104
-  ),
-  createData(
-    5,
-    'Alice',
-    'Wrap',
-    'alice',
-    'alice.wrap@mycompany.com',
-    'User',
-    105
-  ),
-  createData(
-    6,
-    'Json',
-    'McCoy',
-    'json',
-    'json.mccoy@mycompany.com',
-    'User',
-    106
-  ),
-];
-
 const UsersList = () => {
+  const { userAllowedData } = new UserDataGard(authenticatedUser, usersData);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -115,7 +48,7 @@ const UsersList = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+          {userAllowedData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
             <TableRow key={row.id}>
                 <TableCell children={<Link to={`/users/${row.id}`}>{row.firstName}</Link>} />
                 <TableCell children={<Link to={`/users/${row.id}`}>{row.lastName}</Link>} />
@@ -129,7 +62,7 @@ const UsersList = () => {
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
-        count={rows.length}
+        count={userAllowedData.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
