@@ -1,16 +1,8 @@
+import { UserDataType } from "../types/User";
+
 const ADMIN = 'Admin';
 const USER = 'User';
 const CLIENT = 'Client';
-
-type UserDataType = {
-  id: number,
-  firstName: string,
-  lastName: string,
-  username: string,
-  email: string,
-  role: string,
-  clientId: number,
-}
 
 export default class UserDataGard {
   userAllowedData: UserDataType[]
@@ -39,7 +31,7 @@ export default class UserDataGard {
   }
 
   get userUserData() {
-    return this.usersData.filter((user) => user.id === this.authenticatedUser.id);
+    return this.usersData.filter((user) => user._id === this.authenticatedUser._id);
   }
 
   get userClientData() {
