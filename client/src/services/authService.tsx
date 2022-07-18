@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const base_url = window.location.hostname === 'localhost' ? 'http://localhost:3800/api' : 'https://my-employees-2020.herokuapp.com/api';
+const base_url = window.location.hostname === 'localhost' ? 'http://localhost:3800/api' : 'https://role-based-auth.herokuapp.com/api';
 
 // Auth service modules
 
