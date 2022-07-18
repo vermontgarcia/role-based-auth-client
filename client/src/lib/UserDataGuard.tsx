@@ -1,5 +1,6 @@
 import { UserDataType } from "../types/User";
 import { ADMIN, CLIENT, USER } from "./Consts";
+
 export default class UserDataGard {
   userAllowedData: UserDataType[]
 

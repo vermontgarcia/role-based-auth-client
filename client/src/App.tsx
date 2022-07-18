@@ -9,7 +9,7 @@ import Logout from './routes/Logout';
 import RequireAuth from './components/RequireAuth';
 import { ADMIN, CLIENT, USER } from './lib/Consts';
 
-function App() {
+const App = () => {
   return (
     <Routes>
       <Route path='/login' element={<LoginForm />} />
