@@ -84,22 +84,6 @@ const UserDetails = () => {
                       value={user?.email}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      id="firstName"
-                      label="First Name"
-                      value={user?.firstName}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      id="lastName"
-                      label="Last Name"
-                      value={user?.lastName}
-                    />
-                  </Grid>
                   <Grid item xs={12} md={6}>
                     <FormControl fullWidth>
                       <InputLabel id="role-label">Role</InputLabel>
